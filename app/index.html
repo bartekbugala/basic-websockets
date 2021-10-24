@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script defer src="src/app.js"></script>
+  </head>
+  <style>
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      font-family: sans-serif;
+    }
+    body {
+      background: lightgray;
+      padding: 20px;
+    }
+    ul {
+      background: white;
+      list-style: none;
+      padding: 10px;
+      border: gray 1px solid;
+      min-height: 200px;
+      border-radius: 10px;
+    }
+    #input-row {
+      display: flex;
+    }
+    #chat-input {
+      flex: 1 1;
+      height: 30px;
+      margin-right: 10px;
+      border-radius: 5px;
+    }
+
+    #chat-input:focus,
+    #chat-input:focus-within,
+    #chat-input:focus-visible {
+      margin-right: 10px;
+      border-radius: 5px;
+    }
+  </style>
+  <body>
+    <h1>pageworks - chat</h1>
+    <ul></ul>
+    <div id="input-row">
+      <input placeholder="message" id="chat-input" />
+      <button id="chat-button">SEND IO</button>
+    </div>
+
+    <!--     <button>Rock</button>
+    <button>Paper</button>
+    <button>Scissors</button> -->
+  </body>
+</html>
