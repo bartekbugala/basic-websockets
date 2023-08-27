@@ -1,0 +1,19 @@
+{
+  "name": "gencard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "cd server && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bartekbugala/basic-websockets.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bartekbugala/basic-websockets/issues"
+  },
+  "homepage": "https://github.com/bartekbugala/basic-websockets#readme"
+}

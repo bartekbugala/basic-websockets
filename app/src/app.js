@@ -2,7 +2,7 @@
   // Scoped code
   const port = 8080;
   const socket = io();
-
+  console.log('socket', socket)
   let myId;
 
   // client-side
