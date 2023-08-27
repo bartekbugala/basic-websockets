@@ -12,25 +12,21 @@
 
   socket.on('message', (msg) => {
     const el = document.createElement('li');
-    el.innerHTML = `${
-      myId == msg.id ? `${msg.username}(You): ` : msg.username + ': '
-    } ${msg.text}`;
-    const container = document.querySelector('#chat-ul');
+    el.innerHTML = `${myId == msg.id ? `${msg.username}(You): ` : msg.username + ': '} ${
+      msg.text
+    }`;
+    const container = document.querySelector('#chat-ul')
     container.insertBefore(el, container.firstChild);
   });
 
   socket.on('users', (users) => {
-    console.log('users', users);
     const nameUl = document.querySelector('#name-ul');
-    const usersObj = JSON.parse(users);
-    console.log('usersObj', usersObj);
-    const userKeys = Object.keys(usersObj);
-    console.log('userKeys', userKeys);
+    const usrsObj = JSON.parse(users);
+    const usrKeys = Object.keys(usrsObj);
     nameUl.innerHTML = '';
-    userKeys.forEach((userKey) => {
+    usrKeys.forEach((usr) => {
       const li = document.createElement('li');
-      li.innerHTML = `${usersObj?.[userKey].name}`;
-      console.log('usersObj?.[userKey].name', usersObj?.[userKey].name);
+      li.innerHTML = `${usrsObj?.[usr]}`;
       nameUl.appendChild(li);
     });
   });

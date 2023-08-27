@@ -13,7 +13,6 @@ const clientPath = `${__dirname}/../app`;
 app.use(express.static(clientPath));
 // userNames
 const userNames = new Map();
-const users = new Map();
 
 const io = require('socket.io')(server, {
   cors: { origin: '*', methods: ['GET', 'POST'] },
@@ -25,52 +24,36 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }
 
-const createPlayerObject = (name) => {
-  return {
-    name,
-    health: 100,
-    attack: 10,
-    defence: 10,
-  };
-};
-
 let state;
 io.on('connection', (socket) => {
-  users.set(
-    `${socket.id}`,
-    createPlayerObject(`Anonymous-${getRandomInt(0, 9999)}`)
-  );
+  userNames.set(`${socket.id}`, `User-${getRandomInt(0, 9999)}`);
   io.fetchSockets()
     .then((sockets) => {
-      io.emit('users', JSON.stringify(Object.fromEntries(users)));
+      io.emit('users', JSON.stringify(Object.fromEntries(userNames)));
     })
     .catch(console.log);
 
   socket.on('message', (message) => {
     message.text = sanitizeHtml(message.text);
     message.id = sanitizeHtml(message.id);
-    message.username = sanitizeHtml(users.get(`${socket.id}`).name);
+    message.username = sanitizeHtml(userNames.get(`${socket.id}`));
     io.emit('message', message);
   });
-
   socket.on('name', (name) => {
-    const userObj = {
-      ...users.get(socket.id),
-      name: `${name.text}`,
-    };
-    users.set(`${socket.id}`, userObj);
-    const usersObj = Object.fromEntries(users);
+    userNames.set(`${socket.id}`, `${name.text}`);
+    const usersObj = Object.fromEntries(userNames);
     io.emit('users', JSON.stringify(usersObj));
+    console.log(name.text, userNames.entries);
   });
 
   socket.on('disconnect', (message) => {
     io.emit('message', {
       ...message,
-      text: `${users.get(socket.id).name} left the room`,
+      text: `${userNames.get(socket.id)} left the room`,
       username: 'Chat',
     });
-    users.delete(socket.id);
-    io.emit('users', JSON.stringify(Object.fromEntries(users)));
+    userNames.delete(socket.id);
+    io.emit('users', JSON.stringify(Object.fromEntries(userNames)));
   });
 });
 
