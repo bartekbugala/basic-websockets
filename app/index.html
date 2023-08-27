@@ -26,14 +26,37 @@
       min-height: 200px;
       border-radius: 10px;
     }
-    #input-row {
+    .row {
       display: flex;
+      gap: 10px;
     }
-    #chat-input {
+    .chat {
+      flex: 1 1 80%;
+    }
+    .name {
+      flex: 1 1 20%;
+    }
+    #chat-input,
+    #name-input {
       flex: 1 1;
       height: 30px;
       margin-right: 10px;
       border-radius: 5px;
+    }
+
+    #name-input {
+      max-width: 200px;
+    }
+    .chat {
+      max-height: 300px;
+    }
+    #chat-ul {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+    #chat-ul, #name-ul {
+      overflow-y: auto;
+      height: 100%
     }
 
     #chat-input:focus,
@@ -45,11 +68,22 @@
   </style>
   <body>
     <h1>pageworks - chat</h1>
-    <ul></ul>
-    <div id="input-row">
-      <input placeholder="message" id="chat-input" />
-      <button id="chat-button">SEND IO</button>
-    </div>
+    <section class="row">
+      <article class="chat">
+        <ul id="chat-ul"></ul>
+        <div class="row">
+          <input placeholder="message" id="chat-input" />
+          <button id="chat-button">SEND IO</button>
+        </div>
+      </article>
+      <article class="name">
+        <ul id="name-ul"></ul>
+        <div class="row" id="name-row">
+          <input placeholder="input username" id="name-input" />
+          <button id="name-button">SEND IO</button>
+        </div>
+      </article>
+    </section>
 
     <!--     <button>Rock</button>
     <button>Paper</button>
