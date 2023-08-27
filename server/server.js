@@ -39,11 +39,11 @@ io.on('connection', (socket) => {
     message.username = sanitizeHtml(userNames.get(`${socket.id}`));
     io.emit('message', message);
   });
+
   socket.on('name', (name) => {
     userNames.set(`${socket.id}`, `${name.text}`);
     const usersObj = Object.fromEntries(userNames);
     io.emit('users', JSON.stringify(usersObj));
-    console.log(name.text, userNames.entries);
   });
 
   socket.on('disconnect', (message) => {

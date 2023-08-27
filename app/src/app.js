@@ -12,10 +12,10 @@
 
   socket.on('message', (msg) => {
     const el = document.createElement('li');
-    el.innerHTML = `${myId == msg.id ? `${msg.username}(You): ` : msg.username + ': '} ${
-      msg.text
-    }`;
-    const container = document.querySelector('#chat-ul')
+    el.innerHTML = `${
+      myId == msg.id ? `${msg.username}(You): ` : msg.username + ': '
+    } ${msg.text}`;
+    const container = document.querySelector('#chat-ul');
     container.insertBefore(el, container.firstChild);
   });
 
