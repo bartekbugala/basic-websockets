@@ -20,17 +20,23 @@
   });
 
   socket.on('users', (users) => {
-    console.log('users', users);
     const nameUl = document.querySelector('#name-ul');
     const usersObj = JSON.parse(users);
-    console.log('usersObj', usersObj);
     const userKeys = Object.keys(usersObj);
-    console.log('userKeys', userKeys);
     nameUl.innerHTML = '';
     userKeys.forEach((userKey) => {
       const li = document.createElement('li');
-      li.innerHTML = `${usersObj?.[userKey].name}`;
-      console.log('usersObj?.[userKey].name', usersObj?.[userKey].name);
+      li.innerHTML = `${usersObj?.[userKey].name}: `;
+      const health = document.createElement('div');
+      const attack = document.createElement('div');
+      const defence = document.createElement('div');
+      health.innerHTML = `❤️${usersObj?.[userKey].health}`;
+      attack.innerHTML = `⚔️${usersObj?.[userKey].attack}`;
+      defence.innerHTML = `🛡️${usersObj?.[userKey].defence}`;
+      li.appendChild(health).classList.add('attribute', 'health');
+      li.appendChild(defence).classList.add('attribute', 'defence');
+      li.appendChild(attack).classList.add('attribute', 'attack');
+      li.id = socket.id
       nameUl.appendChild(li);
     });
   });
