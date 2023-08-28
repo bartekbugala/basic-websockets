@@ -72,6 +72,18 @@ io.on('connection', (socket) => {
     users.delete(socket.id);
     io.emit('users', JSON.stringify(Object.fromEntries(users)));
   });
+
+  socket.on('attack', (attack) => {
+    console.log('attack', attack);
+    // attack.text = sanitizeHtml(attack.text);
+    // attack.id = sanitizeHtml(attack.id);
+    // const attacked = users.get(attack.text);
+    // const attacker = users.get(attack.id);
+    // users.set(attack.text, {
+    //   ...attacked,
+    //   health: attacked.health - attacker.attack,
+    // });
+  });
 });
 
 // Listener for errors
