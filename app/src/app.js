@@ -1,4 +1,6 @@
 {
+  const initName = sessionStorage.getItem('chatName') ?? null;
+
   // Scoped code
   const port = 8080;
   const socket = io();
@@ -7,6 +9,9 @@
   // client-side
   socket.on('connect', () => {
     if (myId) return;
+    if (initName) {
+      socket.emit('name', { text: initName, id: myId });
+    }
     myId = socket.id;
   });
 
@@ -75,7 +80,9 @@
     const inputField = document.querySelector('#name-input');
     const text = inputField.value;
     if (text.length === 0) return;
+    sessionStorage.setItem('chatName', text);
     socket.emit('name', { text: text, id: myId });
+
     inputField.value = '';
   }
 

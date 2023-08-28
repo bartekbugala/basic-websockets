@@ -1,38 +1,25 @@
-const http = require('http');
 const express = require('express');
+const { createServer } = require('http');
 const sanitizeHtml = require('sanitize-html');
+const socketIo = require('socket.io');
 // init express
-const app = express();
 const port = 8080;
+const app = express();
+
 // start http server
-const server = http.createServer(app);
+const server = createServer(app);
 
 const clientPath = `${__dirname}/../app`;
 
 // SERVE STATIC CLIENT
 app.use(express.static(clientPath));
-// userNames
-const userNames = new Map();
-const users = new Map();
-
-const io = require('socket.io')(server, {
+const io = socketIo(server, {
   cors: { origin: '*', methods: ['GET', 'POST'] },
 });
 
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
-}
+const users = new Map();
 
-const createPlayerObject = (name) => {
-  return {
-    name,
-    health: 100,
-    attack: 10,
-    defence: 10,
-  };
-};
+const { getRandomInt, createPlayerObject } = require('./modules/utils.js');
 
 let state;
 io.on('connection', (socket) => {
@@ -40,6 +27,7 @@ io.on('connection', (socket) => {
     `${socket.id}`,
     createPlayerObject(`Anonymous-${getRandomInt(0, 9999)}`)
   );
+
   io.fetchSockets()
     .then((sockets) => {
       io.emit('users', JSON.stringify(Object.fromEntries(users)));
@@ -74,15 +62,27 @@ io.on('connection', (socket) => {
   });
 
   socket.on('attack', (attack) => {
-    console.log('attack', attack);
-    // attack.text = sanitizeHtml(attack.text);
-    // attack.id = sanitizeHtml(attack.id);
-    // const attacked = users.get(attack.text);
-    // const attacker = users.get(attack.id);
-    // users.set(attack.text, {
-    //   ...attacked,
-    //   health: attacked.health - attacker.attack,
-    // });
+    attack.text = sanitizeHtml(attack.text);
+    attack.id = sanitizeHtml(attack.id);
+    const victim = users.get(attack.text);
+    const attacker = users.get(attack.id);
+    if (victim.health <= 0) {
+      users.set(attack.text, {
+        ...victim,
+        name: `☠️ remains`,
+      });
+    }
+    if (victim.health > 0) {
+      const effect = victim.health - attacker.attack;
+      users.set(attack.text, {
+        ...victim,
+        health: effect,
+        name: effect <= 0 ? `☠️ remains` : victim.name,
+      });
+    }
+
+    const usersObj = Object.fromEntries(users);
+    io.emit('users', JSON.stringify(usersObj));
   });
 });
 
